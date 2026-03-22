@@ -1,0 +1,15 @@
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\bin\Debug\Mods\mod\modinfo.json
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\bin\Debug\Mods\mod\SoilNutrientManagement.deps.json
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\bin\Debug\Mods\mod\SoilNutrientManagement.dll
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\bin\Debug\Mods\mod\SoilNutrientManagement.pdb
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\obj\Debug\SoilNutrientManagement.csproj.AssemblyReference.cache
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\obj\Debug\SoilNutrientManagement.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\obj\Debug\SoilNutrientManagement.AssemblyInfoInputs.cache
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\obj\Debug\SoilNutrientManagement.AssemblyInfo.cs
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\obj\Debug\SoilNutrientManagement.csproj.CoreCompileInputs.cache
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\obj\Debug\SoilNutrientManagement.dll
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\obj\Debug\refint\SoilNutrientManagement.dll
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\obj\Debug\SoilNutrientManagement.pdb
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\obj\Debug\ref\SoilNutrientManagement.dll
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\obj\Debug\SoilNutrientManagement.sourcelink.json
+C:\Users\light\source\repos\SoilNutrientManagement\SoilNutrientManagement\bin\Debug\Mods\mod\modicon.png

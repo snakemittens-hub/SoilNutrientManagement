@@ -4,7 +4,7 @@
     "op": "addmerge",
     "path": "/attributes/bioCharFillByType",
     "value": {
-      "powder-charcoal": 2
+      "powder-charcoal": 0.5
     }
   },
   {
