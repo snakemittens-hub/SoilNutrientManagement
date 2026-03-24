@@ -12,7 +12,7 @@ class UpgradeFarmlandBehavior : BlockBehavior
     {
 
     }
-    static public bool isValidFarmland(string name)
+    static public bool IsValidFarmland(string name)
     {
         //SNMCore.ClientAPI.Logger.Notification("Picked block: " + name);
         bool ret = false;
@@ -23,7 +23,7 @@ class UpgradeFarmlandBehavior : BlockBehavior
         return ret;
     }
 
-    static public bool hasEnoughFertilizer(TreeAttribute farmlandAttributes)
+    static public bool HasEnoughFertilizer(TreeAttribute farmlandAttributes)
     {
         if (farmlandAttributes.HasAttribute("slowN") && farmlandAttributes.HasAttribute("slowP") && farmlandAttributes.HasAttribute("slowK"))
         {
@@ -37,7 +37,7 @@ class UpgradeFarmlandBehavior : BlockBehavior
         return false;
     }
 
-    static public int getUpgradedFertility(int originalFertility)
+    static public int GetUpgradedFertility(int originalFertility)
     {
         //TODO: figure out how to get this from farmland.json
         var fertilities = new List<int> { 5, 25, 50, 65, 80 };
@@ -53,13 +53,13 @@ class UpgradeFarmlandBehavior : BlockBehavior
         return originalFertility;
     }
 
-    static public float downgradeFertilizerOverlay(float overlay)
+    static public float DowngradeFertilizerOverlay(float overlay)
     {
         if (overlay > 100) overlay = 100;
         return (float) Math.Floor(overlay / 15);
     }
 
-    private void upgradeFarmland(Block block, IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel, int requiredBioChar)
+    private void UpgradeFarmland(Block block, IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel, int requiredBioChar)
     {
         var pos = blockSel.Position;
         var farmland = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityFarmland;
@@ -67,28 +67,28 @@ class UpgradeFarmlandBehavior : BlockBehavior
         var farmlandAttributes = new TreeAttribute();
         farmland.ToTreeAttributes(farmlandAttributes);
 
-        if (hasEnoughFertilizer(farmlandAttributes))
+        if (HasEnoughFertilizer(farmlandAttributes))
         {
             byPlayer.InventoryManager.ActiveHotbarSlot.TakeOut(requiredBioChar);
 
             //upgrade original fertility values
-            farmlandAttributes.SetInt("originalFertilityN", getUpgradedFertility(farmlandAttributes.GetInt("originalFertilityN")));
-            farmlandAttributes.SetInt("originalFertilityP", getUpgradedFertility(farmlandAttributes.GetInt("originalFertilityP")));
-            farmlandAttributes.SetInt("originalFertilityK", getUpgradedFertility(farmlandAttributes.GetInt("originalFertilityK")));
+            farmlandAttributes.SetInt("originalFertilityN", GetUpgradedFertility(farmlandAttributes.GetInt("originalFertilityN")));
+            farmlandAttributes.SetInt("originalFertilityP", GetUpgradedFertility(farmlandAttributes.GetInt("originalFertilityP")));
+            farmlandAttributes.SetInt("originalFertilityK", GetUpgradedFertility(farmlandAttributes.GetInt("originalFertilityK")));
 
             //Subtract configured slowNPK values
             farmlandAttributes.SetFloat("slowN", farmlandAttributes.GetFloat("slowN") - ModConfig.configData.requiredN);
             farmlandAttributes.SetFloat("slowP", farmlandAttributes.GetFloat("slowP") - ModConfig.configData.requiredP);
             farmlandAttributes.SetFloat("slowK", farmlandAttributes.GetFloat("slowK") - ModConfig.configData.requiredK);
 
-            //Reduce strength of all fertilizer overlays
+            //Reduce strength of all fertilizer visual overlays
             ITreeAttribute fertilizerOverlay = (ITreeAttribute)farmlandAttributes["fertilizerOverlayStrength"];
             if (fertilizerOverlay != null)
             {
                 var fertilizerOverlayStrength = new Dictionary<string, float>();
                 foreach (KeyValuePair<string, IAttribute> keyValuePair in (IEnumerable<KeyValuePair<string, IAttribute>>)fertilizerOverlay)
                 {
-                    fertilizerOverlayStrength[keyValuePair.Key] = downgradeFertilizerOverlay(((ScalarAttribute<float>)(keyValuePair.Value as FloatAttribute)).value);
+                    fertilizerOverlayStrength[keyValuePair.Key] = DowngradeFertilizerOverlay(((ScalarAttribute<float>)(keyValuePair.Value as FloatAttribute)).value);
                 }
 
                 TreeAttribute overlayAttribute = new TreeAttribute();
@@ -104,16 +104,16 @@ class UpgradeFarmlandBehavior : BlockBehavior
             farmland.FromTreeAttributes(farmlandAttributes, world);
             farmland.MarkDirty();
 
+            //world.PlaySoundAt(world.BlockAccessor.GetBlock(pos).Sounds.Hit, (double)pos.X + 0.5, (double)pos.Y + 0.75, (double)pos.Z + 0.5, byPlayer, true, 12f, 1f);
             long randomsound = world.Rand.Next(1, 4);
-            world.PlaySoundAt(world.BlockAccessor.GetBlock(pos).Sounds.Hit, (double)pos.X + 0.5, (double)pos.Y + 0.75, (double)pos.Z + 0.5, byPlayer, true, 12f, 1f);
-            //world.PlaySoundAt(new AssetLocation("sounds/block/dirt" + randomsound), byPlayer, byPlayer, true, 8);
+            world.PlaySoundAt(new AssetLocation("sounds/block/dirt" + randomsound), (double)pos.X + 0.5, (double)pos.Y + 0.75, (double)pos.Z + 0.5, byPlayer, true, 12f, 1f);
 
             //SNMCore.ClientAPI.Logger.Debug(String.Format("Farmland base fertilities upgraded to {0}/{1}/{2}",
             //    farmland.OriginalFertility[0], farmland.OriginalFertility[1], farmland.OriginalFertility[2]));
         }
     }
 
-    private void defaultBehavior(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel, ref EnumHandling handling)
+    private void DefaultBehavior(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel, ref EnumHandling handling)
     {
         ItemStack heldItemstack = byPlayer.InventoryManager.ActiveHotbarSlot.Itemstack;
         JsonObject attribute = heldItemstack?.Collectible?.Attributes?["bioCharFill"];
@@ -121,9 +121,9 @@ class UpgradeFarmlandBehavior : BlockBehavior
         {
             var requiredBioChar = (int) Math.Ceiling(ModConfig.configData.requiredBioChar / attribute.AsFloat());
             Block block = world.BlockAccessor.GetBlock(blockSel.Position);
-            if (isValidFarmland(block.Code.GetName()) && heldItemstack.StackSize >= requiredBioChar)
+            if (IsValidFarmland(block.Code.GetName()) && heldItemstack.StackSize >= requiredBioChar)
             {
-                upgradeFarmland(block, world, byPlayer, blockSel, requiredBioChar);
+                UpgradeFarmland(block, world, byPlayer, blockSel, requiredBioChar);
                 handling = EnumHandling.Handled;
             }
             else
@@ -138,7 +138,7 @@ class UpgradeFarmlandBehavior : BlockBehavior
         Block block = world.BlockAccessor.GetBlock(blockSel.Position);
         if(block is not null)
         {
-            defaultBehavior(world, byPlayer, blockSel, ref handling);
+            DefaultBehavior(world, byPlayer, blockSel, ref handling);
         }
         return true;
     }
