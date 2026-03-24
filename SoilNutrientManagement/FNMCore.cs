@@ -11,9 +11,9 @@ using Vintagestory.API.Server;
 using Vintagestory.Client.NoObf;
 using Vintagestory.GameContent;
 
-namespace SoilNutrientManagement;
+namespace FarmlandNutrientManagement;
 
-public class SNMCore : ModSystem
+public class FNMCore : ModSystem
 {
     public static ICoreAPI CoreAPI;
     public static ICoreClientAPI ClientAPI;

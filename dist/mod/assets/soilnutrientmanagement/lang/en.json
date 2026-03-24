@@ -1,3 +1,5 @@
 {
-    "hello": "hello world!"
+  "hello": "hello world!",
+  "introduction-title": "Farmland Nutrient Management",
+  "introduction-text": "<strong>Farmland Nutrient Management</strong><br>    <i>\"It ain't much, but it's honest work.\"</i> - Dave Brandt<br><br>Farmland can be permanently upgraded in place via application of sufficient fertilizer and biochar, all the way from barren, through low, medium, and high, and finally to Terra Preta.<br><br><strong>Step One:</strong><br>Add any combination of fertilizers to add at least 150 N, 90 P, and 30 K. <br><itemstack type=\"item\">compost</itemstack><itemstack type=\"item\">bonemeal</itemstack><br><br><strong>Step Two:</strong><br>Add two powdered charcoal to the fertilized farmland. <br><itemstack type=\"item\">powder-charcoal</itemstack><br><br><strong>Step Three:</strong><br>Wait! The farmland will now regenerate nutrients at the normal rate up to its new limits.<br><br><strong>Note:</strong><br>Any existing permaboosts will be cleared on upgrading, but can be reapplied later."
 }

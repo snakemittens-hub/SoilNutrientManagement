@@ -1,4 +1,4 @@
-﻿using SoilNutrientManagement;
+﻿using FarmlandNutrientManagement;
 using System;
 using Vintagestory.API.Common;
 
@@ -21,8 +21,8 @@ public class ModConfig
         }
         catch (Exception ex)
         {
-            SNMCore.CoreAPI.Logger.Error("Could not load config! Loading default settings instead.");
-            SNMCore.CoreAPI.Logger.Error(ex.Message);
+            FNMCore.CoreAPI.Logger.Error("Could not load config! Loading default settings instead.");
+            FNMCore.CoreAPI.Logger.Error(ex.Message);
             configData = new ConfigData();
         }
     }

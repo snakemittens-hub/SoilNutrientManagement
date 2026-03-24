@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SoilNutrientManagement")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3ac56ab980b394bd5b70b9dfdf863d296fd968fc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cb10480d00fcfe6eca3dd59d625f29bdec96b036")]
 [assembly: System.Reflection.AssemblyProductAttribute("SoilNutrientManagement")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SoilNutrientManagement")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

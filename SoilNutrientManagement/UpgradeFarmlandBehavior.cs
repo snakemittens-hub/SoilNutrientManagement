@@ -4,7 +4,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.GameContent;
 
-namespace SoilNutrientManagement;
+namespace FarmlandNutrientManagement;
 
 class UpgradeFarmlandBehavior : BlockBehavior
 {

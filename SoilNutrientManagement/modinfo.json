@@ -1,7 +1,7 @@
 {
     "type": "Code",
-    "modid": "soilnutrientmanagement",
-  "name": "SoilNutrientManagement",
+    "modid": "farmlandnutrientmanagement",
+  "name": "FarmlandNutrientManagement",
     "side":  "universal",
     "authors": [
         "SnakeMittens"

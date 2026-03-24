@@ -60,9 +60,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\light\\source\\repos\\SoilNutrientManagement\\SoilNutrientManagement\\SoilNutrientManagement.csproj",
-      "projectName": "SoilNutrientManagement",
-      "projectPath": "C:\\Users\\light\\source\\repos\\SoilNutrientManagement\\SoilNutrientManagement\\SoilNutrientManagement.csproj",
+      "projectUniqueName": "C:\\Users\\light\\source\\repos\\SoilNutrientManagement\\SoilNutrientManagement\\FarmlandNutrientManagement.csproj",
+      "projectName": "FarmlandNutrientManagement",
+      "projectPath": "C:\\Users\\light\\source\\repos\\SoilNutrientManagement\\SoilNutrientManagement\\FarmlandNutrientManagement.csproj",
       "packagesPath": "C:\\Users\\light\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\light\\source\\repos\\SoilNutrientManagement\\SoilNutrientManagement\\obj\\",
       "projectStyle": "PackageReference",
