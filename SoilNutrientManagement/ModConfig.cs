@@ -21,8 +21,8 @@ public class ModConfig
         }
         catch (Exception ex)
         {
-            FNMCore.CoreAPI.Logger.Error("Could not load config! Loading default settings instead.");
-            FNMCore.CoreAPI.Logger.Error(ex.Message);
+            api.Logger.Error("Could not load config! Loading default settings instead.");
+            api.Logger.Error(ex.Message);
             configData = new ConfigData();
         }
     }

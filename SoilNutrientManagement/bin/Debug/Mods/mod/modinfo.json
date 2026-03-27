@@ -1,14 +1,13 @@
 {
-    "$schema": "https://moddbcdn.vintagestory.at/schema/modinfo.latest.json",
     "type": "Code",
-    "modid": "soilnutrientmanagement",
-    "name": "SoilNutrientManagement",
+    "modid": "farmlandnutrientmanagement",
+  "name": "FarmlandNutrientManagement",
+    "side":  "universal",
     "authors": [
         "SnakeMittens"
     ],
     "description": "Upgrade farmland in place",
-    "version": "1.0.0",
-    "dependencies": {
-        "game": "1.21.0"
-    }
+    "version": "1.2.0",
+  "requiredOnClient": true,
+  "requiredOnServer": true
 }

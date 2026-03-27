@@ -7,7 +7,7 @@
         "SnakeMittens"
     ],
     "description": "Upgrade farmland in place",
-    "version": "1.0.1",
+    "version": "1.2.0",
   "requiredOnClient": true,
   "requiredOnServer": true
 }
