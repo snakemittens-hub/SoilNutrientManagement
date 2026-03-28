@@ -6,7 +6,7 @@ public class ModConfig
 {
     public static ConfigData configData;
 
-    private static string configFile = "SoilNutrientManagementConfig.json";
+    private static string configFile = "FarmlandNutrientManagementConfig.json";
 
     public static void tryToLoadConfig(ICoreAPI api)
     {

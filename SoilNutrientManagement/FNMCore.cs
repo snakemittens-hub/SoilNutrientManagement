@@ -13,7 +13,7 @@ public class FNMCore : ModSystem
     public override void Start(ICoreAPI api)
     {
         api.RegisterBlockBehaviorClass("UpgradeFarmland", typeof(UpgradeFarmlandBehavior));
-        api.Logger.Notification("Soil Nutrient Management Mod: Started.");
+        api.Logger.Notification("Farmland Nutrient Management Mod: Started.");
     }
 
     public override void StartServerSide(ICoreServerAPI api)
