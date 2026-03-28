@@ -9,5 +9,7 @@
   "low-k": "Not enough potassium. Add fertilizers high in K.",
   "low-biochar": "Not enough {0}. Need at least {1}.",
   "max-fert": "Farmland is already extremely fertile!",
-  "game:itemdesc-powder-charcoal":  "Great for nutrient retention. Use on sufficiently fertilized farmland to permanently increase tier."
+  "game:itemdesc-powder-charcoal": "Great for nutrient retention. Use on sufficiently fertilized farmland to permanently increase tier.",
+  "item-biochar": "Biochar",
+  "itemdesc-biochar": "Great for nutrient retention. Use on sufficiently fertilized farmland to permanently increase tier."
 }

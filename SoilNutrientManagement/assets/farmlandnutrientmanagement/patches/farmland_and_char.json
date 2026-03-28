@@ -16,5 +16,37 @@
         "name": "UpgradeFarmland"
       }
     ]
+  },
+  {
+    "file": "game:itemtypes/resource/drygrass.json",
+    "op": "addmerge",
+    "path": "/combustibleProps",
+    "value": {
+      "meltingPoint": 400,
+      "meltingDuration": 30,
+      "smeltedRatio": 24,
+      "smeltingType": "convert",
+      "smeltedStack": {
+        "type": "item",
+        "code": "farmlandnutrientmanagement:biochar"
+      },
+      "requiresContainer": false
+    }
+  },
+  {
+    "file": "game:itemtypes/resource/stick.json",
+    "op": "addmerge",
+    "path": "/combustibleProps",
+    "value": {
+      "meltingPoint": 400,
+      "meltingDuration": 30,
+      "smeltedRatio": 12,
+      "smeltingType": "convert",
+      "smeltedStack": {
+        "type": "item",
+        "code": "farmlandnutrientmanagement:biochar"
+      },
+      "requiresContainer": false
+    }
   }
 ]
