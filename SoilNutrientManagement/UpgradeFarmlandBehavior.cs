@@ -5,6 +5,7 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Server;
 using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 
@@ -173,6 +174,7 @@ class UpgradeFarmlandBehavior : BlockBehavior
                 farmlandAttributes.GetInt("originalFertilityP") >= 80 &&
                 farmlandAttributes.GetInt("originalFertilityK") >= 80)
             {
+                (this.Api as ICoreServerAPI).SendIngameError(byPlayer as IServerPlayer, "max-fert", Lang.Get("farmlandnutrientmanagement:max-fert"));
                 return;
             }
 
@@ -217,7 +219,9 @@ class UpgradeFarmlandBehavior : BlockBehavior
                 this.Api.Logger.Debug(e.ToString());
             }
 
-            this.Api.Logger.Debug(Lang.Get("farmlandnutrientmanagement:farmland-upgraded") + $"{farmland.OriginalFertility[0]}/{farmland.OriginalFertility[1]}/{farmland.OriginalFertility[2]}");
+            string upgradeMsg = Lang.Get("farmlandnutrientmanagement:farmland-upgraded") + $"{farmland.OriginalFertility[0]}/{farmland.OriginalFertility[1]}/{farmland.OriginalFertility[2]}";
+            (this.Api as ICoreServerAPI).SendMessage(byPlayer, 0, upgradeMsg, EnumChatType.Notification);
+            this.Api.Logger.Debug(upgradeMsg);
         }
     }
 
