@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Client;
@@ -16,16 +17,15 @@ class UpgradeFarmlandBehavior : BlockBehavior
     private ICoreAPI Api;
     public const string PermaboostFertilizersCacheKey = "UpgradeFarmlandBehavior.permaboostFertilizers";
     private PermaFertilityBoost[] _permaboostFertilizerStacks = [];
-    public const string FarmlandFertilitiesCacheKey = "UpgradeFarmlandBehavior.farmlandFertilities";
-    private int[] _farmlandFertilities = [];
+    public const string FertilizerHighPropsCacheKey = "UpgradeFarmlandBehavior.fertilizerHighPropsDict";
+    private static Dictionary<string, string> _fertilizerHighPropsDict = new Dictionary<string, string>();
     public override void OnLoaded(ICoreAPI api){ 
         this.Api = api;
 
         _permaboostFertilizerStacks = ObjectCacheUtil.GetOrCreate(api, PermaboostFertilizersCacheKey, 
             (CreateCachableObjectDelegate<PermaFertilityBoost[]>)(() => GetPermaboostFertilizers(api))).ToArray();
-
-        //_farmlandFertilities = ObjectCacheUtil.GetOrCreate(api, FarmlandFertilitiesCacheKey,
-        //    (CreateCachableObjectDelegate<int[]>)(() => GetFarmlandTiers())).ToArray();
+        _fertilizerHighPropsDict = ObjectCacheUtil.GetOrCreate(api, FertilizerHighPropsCacheKey,
+            (CreateCachableObjectDelegate<Dictionary<string, string>>)(() => GetFertilizerProps(api)));
     }
     public UpgradeFarmlandBehavior(Block block) : base(block){}
 
@@ -47,6 +47,43 @@ class UpgradeFarmlandBehavior : BlockBehavior
         }
         api.Logger.Debug($"Found {permaboostFertilizers.ToArray().Length} fertility permaboosts");
         return permaboostFertilizers.ToArray();
+    }
+
+    public static Dictionary<string, string> GetFertilizerProps(ICoreAPI api)
+    {
+        //var fertPropsDict = new Dictionary<string, FertilizerProps>();
+        var fertHighPropsDict = new Dictionary<string, string>();
+
+        foreach (var collObj in api.World.Collectibles.Where(c => c.Code != null))
+        {
+            JsonObject attribute = collObj?.Attributes?["fertilizerProps"];
+            if (attribute == null || !attribute.Exists) continue;
+            FertilizerProps fertilizerProps = attribute.AsObject<FertilizerProps>((FertilizerProps)null);
+            if (fertilizerProps == null) continue;
+            else
+            {
+                api.Logger.Debug("Found fertilizer: " + collObj.Code);
+                //fertPropsDict.Add(collObj.Code, fertilizerProps);
+                if (fertilizerProps.N >= fertilizerProps.P && fertilizerProps.N >= fertilizerProps.K)
+                {
+                    fertHighPropsDict.Add(collObj.Code, "N");
+                    api.Logger.Debug("Highest nutrient: N");
+                }
+                else if(fertilizerProps.P >= fertilizerProps.N && fertilizerProps.P >= fertilizerProps.K)
+                {
+                    fertHighPropsDict.Add(collObj.Code, "P");
+                    api.Logger.Debug("Highest nutrient: P");
+                }
+                else if (fertilizerProps.K >= fertilizerProps.P && fertilizerProps.K >= fertilizerProps.N)
+                {
+                    fertHighPropsDict.Add(collObj.Code, "K");
+                    api.Logger.Debug("Highest nutrient: K");
+                }
+
+            }
+        }
+        api.Logger.Debug($"Found {fertHighPropsDict.Count} fertilizers");
+        return fertHighPropsDict;
     }
     static public bool IsValidFarmland(string name)
     {
@@ -144,10 +181,47 @@ class UpgradeFarmlandBehavior : BlockBehavior
         return originalFertility;
     }
 
-    static public float DowngradeFertilizerOverlay(float overlay)
-    {
-        if (overlay > 100) overlay = 100;
-        return (float) Math.Floor(overlay / 15);
+    public TreeAttribute DowngradeFertilizerOverlay(TreeAttribute farmlandAttributes)
+    {    
+        //get fertilizer overlay strengths
+        ITreeAttribute fertilizerOverlay = (ITreeAttribute)farmlandAttributes["fertilizerOverlayStrength"];
+        if (fertilizerOverlay != null)
+        {
+            var fertilizerOverlayStrength = new Dictionary<string, float>();
+            foreach (KeyValuePair<string, IAttribute> keyValuePair in (IEnumerable<KeyValuePair<string, IAttribute>>)fertilizerOverlay)
+            {
+                //this.Api.Logger.Debug($"FertOverlay {keyValuePair.Key}: {keyValuePair.Value}");
+                foreach (KeyValuePair<string, string> storedFertilizer in _fertilizerHighPropsDict)
+                {
+                    if (storedFertilizer.Key.Contains(keyValuePair.Key))
+                    {
+                        float oldFert = farmlandAttributes.GetFloat("slow" + storedFertilizer.Value);
+                        float newFert = 0;
+                        switch (storedFertilizer.Value)
+                        {
+                            case "N":
+                                newFert = oldFert - ModConfig.configData.requiredN;
+                                break;
+                            case "P":
+                                newFert = oldFert - ModConfig.configData.requiredP;
+                                break;
+                            case "K":
+                                newFert = oldFert - ModConfig.configData.requiredK;
+                                break;
+                        }
+                        float fertRatio = newFert / oldFert;
+                        fertilizerOverlayStrength[keyValuePair.Key] = ((ScalarAttribute<float>)(keyValuePair.Value as FloatAttribute)).value * fertRatio;
+                    }
+                }
+            }
+
+            //apply new fertilizer overlay strengths to farmAttributes
+            TreeAttribute overlayAttribute = new TreeAttribute();
+            farmlandAttributes["fertilizerOverlayStrength"] = (IAttribute)overlayAttribute;
+            foreach (KeyValuePair<string, float> keyValuePair in fertilizerOverlayStrength)
+                overlayAttribute.SetFloat(keyValuePair.Key, keyValuePair.Value);
+        }
+        return farmlandAttributes;
     }
 
     private void UpgradeFarmland(Block block, IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel, int requiredBioChar)
@@ -184,26 +258,13 @@ class UpgradeFarmlandBehavior : BlockBehavior
             //Restore any permaboost original fertility modifiers
             farmlandAttributes = RestorePermaboosts(farmlandAttributes);
 
+            //Reduce strength of all fertilizer visual overlays
+            farmlandAttributes = DowngradeFertilizerOverlay(farmlandAttributes);
+
             //Subtract configured slowNPK values
             farmlandAttributes.SetFloat("slowN", farmlandAttributes.GetFloat("slowN") - ModConfig.configData.requiredN);
             farmlandAttributes.SetFloat("slowP", farmlandAttributes.GetFloat("slowP") - ModConfig.configData.requiredP);
             farmlandAttributes.SetFloat("slowK", farmlandAttributes.GetFloat("slowK") - ModConfig.configData.requiredK);
-
-            //Reduce strength of all fertilizer visual overlays
-            ITreeAttribute fertilizerOverlay = (ITreeAttribute)farmlandAttributes["fertilizerOverlayStrength"];
-            if (fertilizerOverlay != null)
-            {
-                var fertilizerOverlayStrength = new Dictionary<string, float>();
-                foreach (KeyValuePair<string, IAttribute> keyValuePair in (IEnumerable<KeyValuePair<string, IAttribute>>)fertilizerOverlay)
-                {
-                    fertilizerOverlayStrength[keyValuePair.Key] = DowngradeFertilizerOverlay(((ScalarAttribute<float>)(keyValuePair.Value as FloatAttribute)).value);
-                }
-
-                TreeAttribute overlayAttribute = new TreeAttribute();
-                farmlandAttributes["fertilizerOverlayStrength"] = (IAttribute) overlayAttribute;
-                foreach (KeyValuePair<string, float> keyValuePair in fertilizerOverlayStrength)
-                    overlayAttribute.SetFloat(keyValuePair.Key, keyValuePair.Value);
-            }
 
             //apply attribute changes
             farmland.FromTreeAttributes(farmlandAttributes, world);
