@@ -4,7 +4,7 @@ using Vintagestory.API.Common;
 
 public class ModConfig
 {
-    public static ConfigData configData;
+    public static ConfigData? configData;
 
     private static string configFile = "FarmlandNutrientManagementConfig.json";
 
